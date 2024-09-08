@@ -5,7 +5,7 @@ BitcoinExchange::BitcoinExchange() {}
 BitcoinExchange::~BitcoinExchange() {}
 
 const char* BitcoinExchange::NotOpenFileException::what() const throw() {
-    return "File not open";
+    return "Error: could not open file.";
 }
 
 const char* BitcoinExchange::ERRORPARCEXCEPTION::what() const throw() {
@@ -176,7 +176,7 @@ void BitcoinExchange::exectPrgm(std::ifstream& file) {
 }
 
 int BitcoinExchange::run(int argc, char** argv) {
-    if (argc != 2) {
+    if (argc > 2) {
         std::cerr << "Error: Invalid number of arguments" << std::endl;
         return 1;
     }
