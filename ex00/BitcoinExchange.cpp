@@ -12,6 +12,29 @@ const char* BitcoinExchange::ERRORPARCEXCEPTION::what() const throw() {
     return "Error parsing file";
 }
 
+int    leapYear(int year) {
+    return (!(year % 4) && (year % 100) && (year % 400));
+}
+
+int getDaysInMonth(int year, int month) {
+    switch (month) {
+        case 1: return 31;
+        case 2: return leapYear(year) ? 29 : 28;
+        case 3: return 31;
+        case 4: return 30;
+        case 5: return 31;
+        case 6: return 30;
+        case 7: return 31;
+        case 8: return 31;
+        case 9: return 30;
+        case 10: return 31;
+        case 11: return 30;
+        case 12: return 31;
+        default: return 0;
+    }
+    return (0);
+}
+
 std::ifstream BitcoinExchange::openFile(const char* path) {
     std::ifstream file(path);
     if (!file.is_open()) {
@@ -61,32 +84,42 @@ bool isInteger(const std::string& str) {
     return true;
 }
 
-void parcFirstPart(const std::string& firstpart) {
+int parcFirstPart(const std::string& firstpart) {
     std::stringstream ss(firstpart);
     std::string string;
-    int n, m, l;
+    int year, month, day;
 
-    if (!std::getline(ss, string, '-') || !isInteger(string) || string.size() != 4 || !(std::stringstream(string) >> n)) {
+    if (!std::getline(ss, string, '-') || !isInteger(string) || string.size() != 4 || !(std::stringstream(string) >> year)) {
         throw std::runtime_error("Error parsing year");
     }
 
-    if (!std::getline(ss, string, '-') || !isInteger(string) || string.size() != 2 || !(std::stringstream(string) >> m)) {
+    if (!std::getline(ss, string, '-') || !isInteger(string) || string.size() != 2 || !(std::stringstream(string) >> month)) {
         throw std::runtime_error("Error parsing month");
     }
 
-    if (!std::getline(ss, string, ' ') || !isInteger(string) || string.size() != 2 || !(std::stringstream(string) >> l)) {
+    if (!std::getline(ss, string, ' ') || !isInteger(string) || string.size() != 2 || !(std::stringstream(string) >> day)) {
         throw std::runtime_error("Error parsing day");
     }
 
     if (std::getline(ss, string) && !string.empty()) {
         throw std::runtime_error("Extra data after date");
     }
+    if ((day > getDaysInMonth(year, month)) ||(day <= 0))
+    {
+        return (0);
+    }
+    return (1);
 }
 
 
 void BitcoinExchange::outputCalcul(const std::string& key, double value) {
     std::map<std::string, double>::iterator it = dataMap.find(key);
-    if (it != dataMap.end()) {
+    if (it != dataMap.end())
+        std::cout << "[" << key << "] => " << value << " = " << value * it->second << std::endl;
+    else
+    {
+        std::map<std::string, double>::reverse_iterator it = dataMap.rbegin();
+        for (; it != dataMap.rend() && key <= it->first ; it++){}
         std::cout << "[" << key << "] => " << value << " = " << value * it->second << std::endl;
     }
 }
@@ -109,7 +142,12 @@ void BitcoinExchange::parcInputFile(std::ifstream& file) {
         firstPart.erase(firstPart.find_last_not_of(" \n\r\t") + 1);
         valuePart.erase(0, valuePart.find_first_not_of(" \n\r\t"));
     
-        parcFirstPart(firstPart);
+        int checkYDM = parcFirstPart(firstPart);
+        if (checkYDM == 0)
+        {
+            std::cerr << "Error: Bad input => " << firstPart << std::endl;
+            continue;
+        }
         int check = isDouble(valuePart);
         switch (check) {
             case -1:
