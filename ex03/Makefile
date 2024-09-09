@@ -1,7 +1,7 @@
 SRCS = $(wildcard *.cpp)
 HPP = $(wildcard *.hpp)
 OBJS = $(SRCS:.cpp=.o)
-EXEC =  MutantStack
+EXEC =  PmergeMe
 
 ANSI_RESET   = \x1b[0m
 ANSI_RED     = \x1b[31m
