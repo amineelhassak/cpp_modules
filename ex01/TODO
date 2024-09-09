@@ -1,0 +1,30 @@
+ if (token == "+" || token == "-" || token == "*" || token == "/")
+        {
+            if (s.size() < 2)
+            {
+                throw std::runtime_error("Insufficient operands for operation");
+            }
+            double b = s.top(); s.pop();
+            double a = s.top(); s.pop();
+
+            if (token == "+") s.push(a + b);
+            else if (token == "-") s.push(a - b);
+            else if (token == "*") s.push(a * b);
+            else if (token == "/")
+            {
+                if (b == 0) throw std::runtime_error("Division by zero");
+                s.push(a / b);
+            }
+        }
+        else
+        {
+            try
+            {
+                int number = std::stoi(token);
+                s.push(number);
+            }
+            catch (const std::invalid_argument& e)
+            {
+                throw std::runtime_error("Invalid number: " + token);
+            }
+        }
