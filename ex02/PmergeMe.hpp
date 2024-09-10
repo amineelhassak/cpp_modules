@@ -7,6 +7,8 @@
 #include <stdexcept>
 #include <algorithm>
 #include <cmath>
+#include <deque>
+#include <iomanip>
 
 using std::vector;
 using std::cout;
@@ -20,3 +22,6 @@ using std::min;
 using std::max;
 using std::cerr;
 using std::exception;
+int SuitJacobsthal(int n) ;
+void run(int argc, char** argv,int n) ;
+bool checkNumber(const string& token);

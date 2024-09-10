@@ -43,14 +43,14 @@ void insertionSort(vector<int>& sorted, int value) {
     sorted.insert(pos, value);
 }
 
-void printVector(const vector<int>& vec) {
-    vector<int>::const_iterator it = vec.begin();
-    while (it != vec.end()) {
-        cout << *it << " ";
-        ++it;
-    }
-    cout << endl;
-}
+// void printVector(const vector<int>& vec) {
+//     vector<int>::const_iterator it = vec.begin();
+//     while (it != vec.end()) {
+//         cout << *it << " ";
+//         ++it;
+//     }
+//     cout << endl;
+// }
 
 
 void sortPair(vector<pair<int,int> > &data)
@@ -76,26 +76,19 @@ void sortPair(vector<pair<int,int> > &data)
     data = merged;
 }
 
-int SuitJacobsthal(int n) {
-    int return_value = (pow(2, n) - pow(-1, n)) / 3;
-    if (return_value > 30000)
-        return (-1);
-    return (return_value);
-}
-
 void    generatSequenceJacobsthal(vector<int> &SequenceJacobsthal,int size)
 {
     int value;
     for (int i = 0; i < size; i++)
     {
         value = SuitJacobsthal(i);
-        if (value == -1)
+        if (value == -1 || value > size)
             break ;
         SequenceJacobsthal.push_back(value);
     }
 }
 
-void    generatIndexSequencess(vector<int> &generatIndexSequences,vector<int> sequenceJacobsthal)
+void    generatIndexSequencess(vector<int> &generatIndexSequences,vector<int> sequenceJacobsthal,int size)
 {
     if ((int)sequenceJacobsthal.size() < 3)
         return ;
@@ -107,13 +100,13 @@ void    generatIndexSequencess(vector<int> &generatIndexSequences,vector<int> se
     {
         if (it + 1 != sequenceJacobsthal.end())
         {
-            std::cout << *((it + 1)) << std::endl;
             generatIndexSequences.push_back(*(it + 1));
             a = *(it);
             b = *(it + 1) - 1;
+            if (a > size || b > size)
+                break ;
             for (;a < b; b--) 
             {
-                cout << b << endl;
                 generatIndexSequences.push_back(b);
             }
         }
@@ -132,14 +125,18 @@ void run(int argc, char** argv) {
     int save = -1;
     int size;
     int a, b;
-
-    for (int i = 1; i < argc; i += 2)
+    int iplus = (argc  == 2 ) ? 1 : 2;
+    
+    for (int i = 1; i < argc; i += iplus)
     {
-        stringstream ss1(argv[i]);
-        if (!(ss1 >> a) || a <= 0 || !(checkNumber(argv[i])))
+        if (argv[i])
         {
-            str = argv[i];
-            throw std::runtime_error("bad input " + str);
+            stringstream ss1(argv[i]);
+            if (!(ss1 >> a) || a <= 0 || !(checkNumber(argv[i])))
+            {
+                str = argv[i];
+                throw std::runtime_error("bad input " + str);
+            }
         }
         if (i + 1 < argc) {
             stringstream ss2(argv[i + 1]);
@@ -152,10 +149,7 @@ void run(int argc, char** argv) {
             vectpair.push_back(pair);
         }
         else
-        {
             save = a;
-        }
-        
     }
     sortPair(vectpair);
     for (vector<std::pair<int,int> >::iterator it = vectpair.begin(); it != vectpair.end(); it++)
@@ -163,23 +157,20 @@ void run(int argc, char** argv) {
         res.push_back(it->first);
         util.push_back(it->second);
     }
-    res.insert(res.begin(), *util.begin());
-    util.erase(util.begin());
+    if (util.begin() != util.end()){
+        res.insert(res.begin(), *util.begin());
+        util.erase(util.begin());}
     size = util.size();
     generatSequenceJacobsthal(sequenceJacobsthal,size);
-    generatIndexSequencess(generatIndexSequences, sequenceJacobsthal);
+    generatIndexSequencess(generatIndexSequences, sequenceJacobsthal,size);
     for (vector<int>::iterator j = generatIndexSequences.begin() ; j != generatIndexSequences.end();j++)
     {
         if (*(j) - 1 < (int)util.size())
             insertionSort(res,util[*(j) - 1]);
     }
-    insertionSort(res,util[0]);
+    if (util.size()  &&  util[0])
+        insertionSort(res,util[0]);
     (save != -1) && (insertionSort(res, save), 0);
-    for(int i = 0; i < (int)(res.size()); i++) cout << res[i] << " ";
-        cout << endl;    
-    cout  << std::endl;
-    std::cout << "save is :" << save <<std::endl;
-    cout << "Sorted data:" << endl;
 }
 
 int main(int argc, char** argv) {
@@ -188,7 +179,17 @@ int main(int argc, char** argv) {
         return 1;
     }
     try {
+        clock_t timeVectorAv = clock();
         run(argc, argv);
+        clock_t timeVectorAp = clock() - timeVectorAv;
+        clock_t timeDequeAv = clock();
+        run(argc, argv, 0);
+        clock_t timeDequeAp = clock() - timeDequeAv;
+        double final1 = static_cast<double>(timeVectorAp) / CLOCKS_PER_SEC * 1000;
+        double final2 = static_cast<double>(timeDequeAp) / CLOCKS_PER_SEC * 1000;
+         std::cout << "Time to process a range of " << argc << " elements with std::vector: " << std::fixed << std::setprecision(6) << final1 << " us\n";
+        std::cout << "Time to process a range of " << argc << " elements with std::deque : " << std::setprecision(6) << final2 << " us\n";
+        
     } catch (const exception& e) {
         cerr << e.what() << '\n';
         return 1;
