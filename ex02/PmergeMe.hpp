@@ -1,0 +1,21 @@
+#pragma once
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <deque>
+#include <utility>
+#include <stdexcept>
+#include <algorithm>
+
+using std::vector;
+using std::cout;
+using std::endl;
+using std::string;
+using std::pair;
+using std::deque;
+using std::stringstream;
+using std::make_pair;
+using std::min;
+using std::max;
+using std::cerr;
+using std::exception;

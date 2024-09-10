@@ -8,13 +8,11 @@ int main(int argc, char **argv)
     }
     try
     {
-        
-    run(argv);
+        run(argv);
     }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
-    
     return (0);
 }

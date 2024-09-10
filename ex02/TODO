@@ -1,0 +1,57 @@
+#include "PmergeMe.hpp"
+void merge(const std::vector<int>& left, const std::vector<int>& right, std::vector<int>& result) {
+    std::vector<int>::const_iterator it_left = left.begin();
+    std::vector<int>::const_iterator it_right = right.begin();
+
+    while (it_left != left.end() && it_right != right.end()) {
+        if (*it_left <= *it_right) {
+            result.push_back(*it_left);
+            ++it_left;
+        } else {
+            result.push_back(*it_right);
+            ++it_right;
+        }
+    }
+
+    while (it_left != left.end()) {
+        result.push_back(*it_left);
+        ++it_left;
+    }
+
+    while (it_right != right.end()) {
+        result.push_back(*it_right);
+        ++it_right;
+    }
+}
+
+
+void insertionSort(std::vector<int>& sorted, int value) {
+    std::vector<int>::iterator pos = std::lower_bound(sorted.begin(), sorted.end(), value);
+    sorted.insert(pos, value);
+}
+
+void mergeInsertionSort(std::vector<int>& data) {
+    if (data.size() < 2) return;
+
+    std::vector<int> left, right;
+    size_t mid = data.size() / 2;
+
+    for (size_t i = 0; i < mid; ++i) {
+        left.push_back(data[i]);
+    }
+
+    for (size_t i = mid; i < data.size(); ++i) {
+        right.push_back(data[i]);
+    }
+
+    mergeInsertionSort(left);
+    mergeInsertionSort(right);
+
+    std::vector<int> merged;
+    merge(left, right, merged);
+
+    data.clear();
+    for (std::vector<int>::const_iterator it = merged.begin(); it != merged.end(); ++it) {
+        insertionSort(data, *it);
+    }
+}
