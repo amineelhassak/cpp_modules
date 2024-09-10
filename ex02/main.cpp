@@ -1,16 +1,4 @@
 #include "PmergeMe.hpp"
-#include <cmath>
-// class PmergeMe
-// {
-// public:
-//     static bool checkNumber(const string& token);
-//     static void merge(const vector<int>& left, const vector<int>& right, vector<int>& result);
-//     static void insertionSort(vector<int>& sorted, int value);
-//     static void mergeInsertionSort(vector<int>& data);
-//     static void printVector(const vector<int>& vec);
-//     static void run(int argc, char** argv);
-// };
-
 
 bool checkNumber(const string& token) {
     string::const_iterator it = token.begin();
@@ -89,20 +77,22 @@ void sortPair(vector<pair<int,int> > &data)
 }
 
 int SuitJacobsthal(int n) {
-    return (pow(2, n) - pow(-1, n)) / 3;
+    int return_value = (pow(2, n) - pow(-1, n)) / 3;
+    if (return_value > 30000)
+        return (-1);
+    return (return_value);
 }
 
 void    generatSequenceJacobsthal(vector<int> &SequenceJacobsthal,int size)
 {
+    int value;
     for (int i = 0; i < size; i++)
     {
-
-            // if (SuitJacobsthal(i) == -1)
-            //     break;
-            // std::cout << SuitJacobsthal(i) << std::endl;
-        SequenceJacobsthal.push_back(SuitJacobsthal(i));   
+        value = SuitJacobsthal(i);
+        if (value == -1)
+            break ;
+        SequenceJacobsthal.push_back(value);
     }
-    (void )SequenceJacobsthal;
 }
 
 void    generatIndexSequencess(vector<int> &generatIndexSequences,vector<int> sequenceJacobsthal)
@@ -177,33 +167,19 @@ void run(int argc, char** argv) {
     util.erase(util.begin());
     size = util.size();
     generatSequenceJacobsthal(sequenceJacobsthal,size);
-    while (sequenceJacobsthal.back() > 300)
-    {
-        sequenceJacobsthal.pop_back();
-    }
     generatIndexSequencess(generatIndexSequences, sequenceJacobsthal);
     for (vector<int>::iterator j = generatIndexSequences.begin() ; j != generatIndexSequences.end();j++)
     {
         if (*(j) - 1 < (int)util.size())
-        {
             insertionSort(res,util[*(j) - 1]);
-        }
     }
     insertionSort(res,util[0]);
-    if (save != -1)
-        insertionSort(res, save);
-    for(int i = 0; i < (int)(res.size()); i++)
-        cout << res[i] << " ";
-    cout << endl;
-    // for(int i = 0; i < (int)(util.size()); i++)
-    //     cout << util[i] << " ";
-    
+    (save != -1) && (insertionSort(res, save), 0);
+    for(int i = 0; i < (int)(res.size()); i++) cout << res[i] << " ";
+        cout << endl;    
     cout  << std::endl;
     std::cout << "save is :" << save <<std::endl;
     cout << "Sorted data:" << endl;
-    // printVector(vect);
-    // (void) save;
-    // (void)size;
 }
 
 int main(int argc, char** argv) {
@@ -217,27 +193,5 @@ int main(int argc, char** argv) {
         cerr << e.what() << '\n';
         return 1;
     }
-    // vector<int> vec;
-    // vector<int>newsec;
-    // generatSequenceJacobsthal(vec,100);
-    // for(int i = 0;i < (int)vec.size();i++)
-    // {
-    //     std::cout << vec[i] << '\n';
-    // }
-    // generatIndexSequencess(newsec,vec);
-    (void)argv;
-    (void)argc;
     return 0;
 }
-
-
-// int main()
-// {    
-//     // cout << SuitJacobsthal(0) << endl;
-//     // cout << SuitJacobsthal(1) << endl;
-//     // cout << SuitJacobsthal(2) << endl;
-//     // cout << SuitJacobsthal(3) << endl;
-//     // cout << SuitJacobsthal(4) << endl;
-//     // cout << SuitJacobsthal(5) << endl;
-//     // cout << SuitJacobsthal(6) << endl;
-// }

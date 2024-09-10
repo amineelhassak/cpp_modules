@@ -6,6 +6,7 @@
 #include <utility>
 #include <stdexcept>
 #include <algorithm>
+#include <cmath>
 
 using std::vector;
 using std::cout;
