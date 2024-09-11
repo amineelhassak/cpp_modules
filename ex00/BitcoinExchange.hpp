@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <exception>
 #include <fstream>
@@ -13,7 +14,7 @@ class BitcoinExchange
 		std::map<std::string ,double>dataMap;
 	public:
 		void readDataFile(std::ifstream &file);
-		std::ifstream openFile(const char *path);
+		void openFile(const char *path, std::ifstream &file);
 		int run(int argc, char** argv);
 		void exectPrgm(std::ifstream &file);
 		void outputCalcul(const std::string &key, double value);

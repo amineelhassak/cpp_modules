@@ -1,0 +1,21 @@
+test 1 :
+{
+    in input file (case 1):
+        date | value
+        date | value
+        2019-05-02 | 0.214
+    in input file (case 2):
+        date | value
+        2019-05-2 | 0.214
+    must not exit at the first error, it must give the value of ("2019-05-02 | 0.214")
+    in summary : don't exit at all or throwing an exception during parsing
+}
+
+test 2 :
+{
+    date | value
+    2013-12-01 | 2000.1
+
+    value must be between 0 and 1000
+}
+

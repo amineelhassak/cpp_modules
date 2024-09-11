@@ -35,12 +35,11 @@ int getDaysInMonth(int year, int month) {
     return (0);
 }
 
-std::ifstream BitcoinExchange::openFile(const char* path) {
-    std::ifstream file(path);
+void BitcoinExchange::openFile(const char *path, std::ifstream &file) {
+    file.open(path);
     if (!file.is_open()) {
         throw NotOpenFileException();
     }
-    return file;
 }
 
 void BitcoinExchange::readDataFile(std::ifstream& file) {
@@ -89,25 +88,19 @@ int parcFirstPart(const std::string& firstpart) {
     std::string string;
     int year, month, day;
 
-    if (!std::getline(ss, string, '-') || !isInteger(string) || string.size() != 4 || !(std::stringstream(string) >> year)) {
-        throw std::runtime_error("Error parsing year");
-    }
-
-    if (!std::getline(ss, string, '-') || !isInteger(string) || string.size() != 2 || !(std::stringstream(string) >> month)) {
-        throw std::runtime_error("Error parsing month");
-    }
-
-    if (!std::getline(ss, string, ' ') || !isInteger(string) || string.size() != 2 || !(std::stringstream(string) >> day)) {
-        throw std::runtime_error("Error parsing day");
-    }
-
-    if (std::getline(ss, string) && !string.empty()) {
-        throw std::runtime_error("Extra data after date");
-    }
+    if (!std::getline(ss, string, '-') || !isInteger(string)\
+         || string.size() != 4 || !(std::stringstream(string) >> year))
+        return false;
+    if (!std::getline(ss, string, '-') || !isInteger(string) ||\
+         string.size() != 2 || !(std::stringstream(string) >> month))
+        return false;
+    if (!std::getline(ss, string, ' ') || !isInteger(string) \
+        || string.size() != 2 || !(std::stringstream(string) >> day))
+        return false;
+    if (std::getline(ss, string) && !string.empty())
+        return false;
     if ((day > getDaysInMonth(year, month)) ||(day <= 0))
-    {
         return (0);
-    }
     return (1);
 }
 
@@ -161,7 +154,7 @@ void BitcoinExchange::parcInputFile(std::ifstream& file) {
                 break;
             default:
                 std::stringstream(valuePart) >> value;
-                if (value > INT_MAX || value < INT_MIN) {
+                if (value > 1000  || value < INT_MIN) {
                     std::cerr << "Error: too large a number." << std::endl;
                 } else {
                     outputCalcul(firstPart, value);
@@ -182,8 +175,8 @@ int BitcoinExchange::run(int argc, char** argv) {
     }
 
     try {
-        std::ifstream file = openFile(argv[1]);
-        std::ifstream db = openFile("data.csv");
+        std::ifstream file;openFile(argv[1], file);
+        std::ifstream db;openFile("data.csv", db);
         readDataFile(db);
         exectPrgm(file);
     } catch (const std::exception& e) {

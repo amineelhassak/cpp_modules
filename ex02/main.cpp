@@ -43,16 +43,6 @@ void insertionSort(vector<int>& sorted, int value) {
     sorted.insert(pos, value);
 }
 
-// void printVector(const vector<int>& vec) {
-//     vector<int>::const_iterator it = vec.begin();
-//     while (it != vec.end()) {
-//         cout << *it << " ";
-//         ++it;
-//     }
-//     cout << endl;
-// }
-
-
 void sortPair(vector<pair<int,int> > &data)
 {
     if (data.size() < 2) return;
@@ -113,7 +103,8 @@ void    generatIndexSequencess(vector<int> &generatIndexSequences,vector<int> se
     }
 }
 
-void run(int argc, char** argv) {
+void run(int argc, char** argv)
+{
     vector<int> sequenceJacobsthal;
     vector<int> generatIndexSequences;
     vector<pair<int,int> > vectpair;
@@ -150,7 +141,7 @@ void run(int argc, char** argv) {
         }
         else
             save = a;
-    }
+    }    
     sortPair(vectpair);
     for (vector<std::pair<int,int> >::iterator it = vectpair.begin(); it != vectpair.end(); it++)
     {
@@ -161,15 +152,23 @@ void run(int argc, char** argv) {
         res.insert(res.begin(), *util.begin());
         util.erase(util.begin());}
     size = util.size();
-    generatSequenceJacobsthal(sequenceJacobsthal,size);
-    generatIndexSequencess(generatIndexSequences, sequenceJacobsthal,size);
-    for (vector<int>::iterator j = generatIndexSequences.begin() ; j != generatIndexSequences.end();j++)
+    if (size <= 3)
     {
-        if (*(j) - 1 < (int)util.size())
-            insertionSort(res,util[*(j) - 1]);
+        for (vector<int>::iterator it = util.begin(); it != util.end(); it++)
+           insertionSort(res,*it);
     }
-    if (util.size()  &&  util[0])
-        insertionSort(res,util[0]);
+    else
+    {
+        generatSequenceJacobsthal(sequenceJacobsthal,size);
+        generatIndexSequencess(generatIndexSequences, sequenceJacobsthal,size);
+        for (vector<int>::iterator j = generatIndexSequences.begin() ; j != generatIndexSequences.end();j++)
+        {
+            if (*(j) - 1 < (int)util.size())
+                insertionSort(res,util[*(j) - 1]);
+        }
+        if (util.size()  &&  util[0])
+            insertionSort(res,util[0]);
+    }
     (save != -1) && (insertionSort(res, save), 0);
 }
 
