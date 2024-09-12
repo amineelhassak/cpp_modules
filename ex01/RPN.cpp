@@ -6,6 +6,8 @@ bool checkNumber(std::string const &token)
     {
         if (!isdigit(*it))
             return false;
+        if (isdigit(*it) && it != token.end() && isdigit(*(it + 1)))
+            return false;
     }
     return true;
 }
