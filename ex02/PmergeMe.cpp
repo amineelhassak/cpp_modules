@@ -65,11 +65,17 @@ int SuitJacobsthal(int n) {
 static void    generatSequenceJacobsthal(deque<int> &SequenceJacobsthal,int size)
 {
     int value;
+    int check = 0;
+
     for (int i = 0; i < size; i++)
     {
         value = SuitJacobsthal(i);
-        if (value == -1 || value > size)
-            break ;
+        if (value == -1)
+            break;
+        if (value > size)
+            check++;
+        if (check == 2)
+            break;
         SequenceJacobsthal.push_back(value);
     }
 }
@@ -98,68 +104,6 @@ void    generatIndexSequencess(deque<int> &generatIndexSequences,deque<int> sequ
         }
     }
 }
-
-// void run(int argc, char** argv,int n) {
-//     deque<int> sequenceJacobsthal;
-//     deque<int> generatIndexSequences;
-//     deque<pair<int,int> > dqpair;
-//     pair<int,int> pair;
-//     deque<int> util;
-//     deque<int> vec;
-//     deque<int> res;
-//     string str;
-//     int save = -1;
-//     int size;
-//     int a, b;
-
-//     (void)n;
-//     for (int i = 1; i < argc; i += 2)
-//     {
-
-//         stringstream ss1(argv[i]);
-//         if (!(ss1 >> a) || a <= 0 || !(checkNumber(argv[i])))
-//         {
-//             str = argv[i];
-//             throw std::runtime_error("bad input " + str);
-//         }
-//         if (i + 1 < argc) {
-//             stringstream ss2(argv[i + 1]);
-//             if (!(ss2 >> b) || b <= 0 || !(checkNumber(argv[i + 1])))
-//             {
-//                 str = argv[i];
-//                 throw std::runtime_error("bad input " + str);
-//             }
-//             pair = make_pair(max(a, b), min(a, b));
-//             dqpair.push_back(pair);
-//         }
-//         else
-//         {
-//             save = a;
-//         }
-        
-//     }
-//     sortPair(dqpair);
-//     for (deque<std::pair<int,int> >::iterator it = dqpair.begin(); it != dqpair.end(); it++)
-//     {
-//         res.push_back(it->first);
-//         util.push_back(it->second);
-//     }
-//     res.insert(res.begin(), *util.begin());
-//     util.erase(util.begin());
-//     size = util.size();
-//     generatSequenceJacobsthal(sequenceJacobsthal,size);
-//     generatIndexSequencess(generatIndexSequences, sequenceJacobsthal,size);
-//     for (deque<int>::iterator j = generatIndexSequences.begin() ; j != generatIndexSequences.end();j++)
-//     {
-//         if (*(j) - 1 < (int)util.size())
-//             insertionSort(res,util[*(j) - 1]);
-//     }
-//     insertionSort(res,util[0]);
-//     (save != -1) && (insertionSort(res, save), 0);
-//     std::cout <<"After:   ";
-//     for(int i = 0; i < (int)(res.size()); i++) cout << res[i] << " ";
-//         cout << endl;
-// }
 
 void run(int argc, char** argv,int n) {
     deque<int> sequenceJacobsthal;
@@ -209,6 +153,7 @@ void run(int argc, char** argv,int n) {
     if (util.begin() != util.end()){
         res.insert(res.begin(), *util.begin());
         util.erase(util.begin());}
+    
     size = util.size();
     if (size <= 3)
     {
@@ -217,8 +162,8 @@ void run(int argc, char** argv,int n) {
     }
     else
     {
-        generatSequenceJacobsthal(sequenceJacobsthal,size);
-        generatIndexSequencess(generatIndexSequences, sequenceJacobsthal,size);
+        generatSequenceJacobsthal(sequenceJacobsthal,argc - 1);
+        generatIndexSequencess(generatIndexSequences, sequenceJacobsthal,argc - 1);
         for (deque<int>::iterator j = generatIndexSequences.begin() ; j != generatIndexSequences.end();j++)
         {
             if (*(j) - 1 < (int)util.size())

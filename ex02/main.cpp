@@ -69,11 +69,17 @@ void sortPair(vector<pair<int,int> > &data)
 void    generatSequenceJacobsthal(vector<int> &SequenceJacobsthal,int size)
 {
     int value;
+    int check = 0;
+
     for (int i = 0; i < size; i++)
     {
         value = SuitJacobsthal(i);
-        if (value == -1 || value > size)
-            break ;
+        if (value == -1)
+            break;
+        if (value > size)
+            check++;
+        if (check == 2)
+            break;
         SequenceJacobsthal.push_back(value);
     }
 }
