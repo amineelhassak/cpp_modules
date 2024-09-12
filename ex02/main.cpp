@@ -155,7 +155,7 @@ void run(int argc, char** argv)
     if (size <= 3)
     {
         for (vector<int>::iterator it = util.begin(); it != util.end(); it++)
-           insertionSort(res,*it);
+           insertionSort(res, *it);
     }
     else
     {
@@ -172,7 +172,12 @@ void run(int argc, char** argv)
     (save != -1) && (insertionSort(res, save), 0);
 }
 
+// void l()
+// {
+//     system("leaks PmergeMe");
+// }
 int main(int argc, char** argv) {
+    // atexit(l);
     if (argc <= 1) {
         cout << "Erreur : Pas assez d'arguments." << endl;
         return 1;
@@ -186,8 +191,8 @@ int main(int argc, char** argv) {
         clock_t timeDequeAp = clock() - timeDequeAv;
         double final1 = static_cast<double>(timeVectorAp) / CLOCKS_PER_SEC * 1000;
         double final2 = static_cast<double>(timeDequeAp) / CLOCKS_PER_SEC * 1000;
-         std::cout << "Time to process a range of " << argc << " elements with std::vector: " << std::fixed << std::setprecision(6) << final1 << " us\n";
-        std::cout << "Time to process a range of " << argc << " elements with std::deque : " << std::setprecision(6) << final2 << " us\n";
+        std::cout << "Time to process a range of " << argc - 1<< " elements with std::vector: " << std::fixed << std::setprecision(6) << final1 << " us\n";
+        std::cout << "Time to process a range of " << argc - 1<< " elements with std::deque : " << std::setprecision(6) << final2 << " us\n";
         
     } catch (const exception& e) {
         cerr << e.what() << '\n';
