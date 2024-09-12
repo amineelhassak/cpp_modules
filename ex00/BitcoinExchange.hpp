@@ -18,7 +18,6 @@ class BitcoinExchange
 		int run(int argc, char** argv);
 		void exectPrgm(std::ifstream &file);
 		void outputCalcul(const std::string &key, double value);
-		void parcInputFile(std::ifstream &file);
 		BitcoinExchange();
 		~BitcoinExchange();
 		class NotOpenFileException : public std::exception
