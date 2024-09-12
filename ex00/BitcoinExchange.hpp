@@ -20,6 +20,8 @@ class BitcoinExchange
 		void outputCalcul(const std::string &key, double value);
 		BitcoinExchange();
 		~BitcoinExchange();
+		BitcoinExchange(const BitcoinExchange &other);
+		BitcoinExchange &operator=(const BitcoinExchange &other);
 		class NotOpenFileException : public std::exception
 		{
 			public:

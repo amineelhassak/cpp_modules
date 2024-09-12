@@ -139,7 +139,7 @@ void run(int argc, char** argv)
             stringstream ss2(argv[i + 1]);
             if (!(ss2 >> b) || b <= 0 || !(checkNumber(argv[i + 1])))
             {
-                str = argv[i];
+                str = argv[i + 1];
                 throw std::runtime_error("bad input " + str);
             }
             pair = make_pair(max(a, b), min(a, b));
@@ -182,6 +182,7 @@ void run(int argc, char** argv)
 // {
 //     system("leaks PmergeMe");
 // }
+
 int main(int argc, char** argv) {
     // atexit(l);
     if (argc <= 1) {
@@ -189,16 +190,34 @@ int main(int argc, char** argv) {
         return 1;
     }
     try {
+
         clock_t timeVectorAv = clock();
         run(argc, argv);
         clock_t timeVectorAp = clock() - timeVectorAv;
         clock_t timeDequeAv = clock();
-        run(argc, argv, 0);
+        deque<int> org;
+        run(argc, argv,org);
         clock_t timeDequeAp = clock() - timeDequeAv;
+
         double final1 = static_cast<double>(timeVectorAp) / CLOCKS_PER_SEC * 1000;
         double final2 = static_cast<double>(timeDequeAp) / CLOCKS_PER_SEC * 1000;
-        std::cout << "Time to process a range of " << argc - 1<< " elements with std::vector: " << std::fixed << std::setprecision(6) << final1 << " us\n";
-        std::cout << "Time to process a range of " << argc - 1<< " elements with std::deque : " << std::setprecision(6) << final2 << " us\n";
+        cout << "Before:\t";
+        for (int i = 1;argv[i];i++)
+        {
+            stringstream ss(argv[i]);
+            int tmp;ss >> tmp;cout << tmp;
+            if (i + 1 != argc)
+                cout << " ";
+        }
+        cout << "\nAfter:\t";
+        for (size_t i = 0;org[i];i++)
+        {
+            cout << org[i];
+            if (i + 1 != org.size())
+                cout << " ";
+        }
+        cout << "\nTime to process a range of " << argc - 1<< " elements with std::vector: " << std::fixed << std::setprecision(6) << final1 << " us\n";
+        cout << "Time to process a range of " << argc - 1<< " elements with std::deque : " << std::setprecision(6) << final2 << " us\n";
         
     } catch (const exception& e) {
         cerr << e.what() << '\n';

@@ -4,6 +4,21 @@ BitcoinExchange::BitcoinExchange() {}
 
 BitcoinExchange::~BitcoinExchange() {}
 
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &other)
+{
+    *this = other;
+}
+
+BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &other)
+{
+    if (this != &other)
+    {
+        this->dataMap.clear();
+        this->dataMap = other.dataMap;
+    }
+    return (*this);
+}
+
 const char* BitcoinExchange::NotOpenFileException::what() const throw()
 {
     return ("Error: could not open file.");
@@ -69,13 +84,14 @@ void BitcoinExchange::readDataFile(std::ifstream& file)
 int isDouble(const std::string& str)
 {
     int dotCount;
+    std::string::const_iterator it = str.begin();
     
     dotCount = 0;
     if (str.empty())
         return (-1);
-    if (str[0] == '-')
-        return (-2);
-    for (std::string::const_iterator it = str.begin(); it != str.end(); ++it)
+    if (it != str.end() && (*it == '+' || *it == '-') && it + 1 != str.end())
+        it++;
+    for (;it != str.end(); ++it)
     {
         if (!std::isdigit(*it) && *it != '.')
             return (-3);
@@ -166,16 +182,15 @@ void BitcoinExchange::exectPrgm(std::ifstream& file)
             case -1:
                 std::cerr << "Error: Bad input => " << firstPart << std::endl;
                 break;
-            case -2:
-                std::cerr << "Error: not a positive number." << std::endl;
-                break;
             case -3:
                 std::cerr << "Error: Bad input => " << firstPart << std::endl;
                 break;
             default:
                 std::stringstream(valuePart) >> value;
-                if (value > 1000  || value < INT_MIN)
-                    std::cerr << "Error: too large a number." << std::endl;
+                if (value > 1000)
+                    std::cerr << "Error: too large number." << std::endl;
+                else if (value < 0)
+                    std::cerr << "Error: not a positive number." << std::endl;
                 else
                     outputCalcul(firstPart, value);
                 break;
@@ -183,12 +198,13 @@ void BitcoinExchange::exectPrgm(std::ifstream& file)
     }
 }
 
-int BitcoinExchange::run(int argc, char** argv) {
-    if (argc > 2) {
+int BitcoinExchange::run(int argc, char** argv)
+{
+    if (argc > 2)
+    {
         std::cerr << "Error: Invalid number of arguments" << std::endl;
         return (1);
     }
-
     try {
         std::ifstream file;openFile(argv[1], file);
         std::ifstream db;openFile("data.csv", db);

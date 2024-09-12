@@ -106,19 +106,19 @@ void    generatIndexSequencess(deque<int> &generatIndexSequences,deque<int> sequ
     }
 }
 
-void run(int argc, char** argv,int n) {
+void run(int argc, char** argv, deque<int> &org)
+{
     deque<int> sequenceJacobsthal;
     deque<int> generatIndexSequences;
     deque<pair<int,int> > dqpair;
     pair<int,int> pair;
     deque<int> util;
     deque<int> vec;
-    deque<int> res;
+    deque<int> &res = org;
     string str;
     int save = -1;
     int size;
     int a, b;
-    (void)n;
     int iplus = (argc  == 2 ) ? 1 : 2;
     
     for (int i = 1; i < argc; i += iplus)
@@ -174,7 +174,4 @@ void run(int argc, char** argv,int n) {
             insertionSort(res,util[0]);
     }
     (save != -1) && (insertionSort(res, save), 0);
-    std::cout <<"After:   ";
-    for(int i = 0; i < (int)(res.size()); i++) cout << res[i] << " ";
-        cout << endl;
 }

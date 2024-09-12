@@ -1,8 +1,8 @@
 #include "RPN.hpp"
 
-bool checkNumber(std::string const &token)
+bool    checkNumber(std::string const &token)
 {
-    for(std::string::const_iterator it = token.begin(); it != token.end(); ++it)
+    for (std::string::const_iterator it = token.begin(); it != token.end(); ++it)
     {
         if (!isdigit(*it))
             return false;
@@ -12,11 +12,14 @@ bool checkNumber(std::string const &token)
     return true;
 }
 
-void run(char** argv)
+void    run(char** argv)
 {
-    std::stack<int> dataStack;
-    std::stringstream sstream(argv[1]);
-    std::string token;
+    std::stack<int>     dataStack;
+    std::stringstream   sstream(argv[1]);
+    std::string         token;
+    int                 m;
+    int                 n;
+    int                 number;
 
     while (sstream >> token)
     {
@@ -25,9 +28,9 @@ void run(char** argv)
             if (dataStack.size() < 2) 
                 throw std::runtime_error("Erreur : Pas assez d'opérandes pour l'opération");
 
-            int m = dataStack.top(); 
+            m = dataStack.top(); 
             dataStack.pop();
-            int n = dataStack.top(); 
+            n = dataStack.top(); 
             dataStack.pop();
 
             if (token == "+") 
@@ -48,10 +51,8 @@ void run(char** argv)
             try
             {
                 if (!checkNumber(token))
-                {
                     throw std::runtime_error("Error invlid number ==> " + token);
-                }
-                int number = std::stoi(token);
+                number = std::stoi(token);
                 dataStack.push(number); 
             }
             catch(const std::exception& e)
@@ -62,11 +63,7 @@ void run(char** argv)
     }
 
     if (dataStack.size() != 1)
-    {
         throw std::runtime_error("Erreur : Trop de valeurs dans l'entrée");
-    }
     else
-    {
         std::cout << "Résultat : " << dataStack.top() << std::endl;
-    }
 }

@@ -23,5 +23,5 @@ using std::max;
 using std::cerr;
 using std::exception;
 int SuitJacobsthal(int n) ;
-void run(int argc, char** argv,int n) ;
+void run(int argc, char** argv,deque<int> &org) ;
 bool checkNumber(const string& token);
