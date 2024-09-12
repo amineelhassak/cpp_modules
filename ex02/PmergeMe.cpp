@@ -84,6 +84,7 @@ void    generatIndexSequencess(deque<int> &generatIndexSequences,deque<int> sequ
 {
     if ((int)sequenceJacobsthal.size() < 3)
         return ;
+
     deque<int>::iterator it = sequenceJacobsthal.begin();
     deque<int>::iterator it2;
     it += 2;
