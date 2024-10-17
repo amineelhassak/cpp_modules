@@ -1,4 +1,4 @@
-# cpp_module2
+# cpp_module
 cpp 
 # Gestion des Exceptions en C++
 
